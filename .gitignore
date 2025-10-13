@@ -1,0 +1,28 @@
+# ROS build files
+build/
+devel/
+install/
+logs/
+.catkin_tools/
+
+# ROS generated files
+*.bag
+*.bag.active
+*.log
+*.so
+*.pyc
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*~
+*.bak
+
+# Other
+*.DS_Store
+Thumbs.db
+
+# Ignore specific unitree packages
+unitree_api/
+unitree_go/
