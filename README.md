@@ -1,23 +1,16 @@
-# GO2 You Can Move
-
-This repository contains a collection of ROS 2 packages for controlling and interacting with the Unitree Go2 robot.
-
-## Pre-requisites
-
-Before building this workspace, please ensure you have the following dependencies installed and sourced correctly in your ROS 2 environment.
-
-*   **ROS 2:** This workspace is intended for use with ROS 2 (Humble/Iron).
-*   **unitree_ros2:** The official ROS 2 wrapper for the Unitree SDK. This can be found here: [https://github.com/unitreerobotics/unitree_ros2](https://github.com/unitreerobotics/unitree_ros2)
-*   **go2_driver:** The specific driver package for the Go2 robot.
-
 ## Build Instructions
 
 1.  **Clone the repository:**
-    Clone this repository into your ROS 2 workspace's `src` directory.
+    This repository uses Git submodules to include the `go2_driver` and `go2_interfaces` packages. You must clone it using the `--recurse-submodules` flag to ensure these dependencies are downloaded correctly.
 
     ```bash
     cd ~/your_ros2_ws/src
-    git clone https://github.com/arpa-byte/go2_you_can_move.git
+    git clone --recurse-submodules https://github.com/arpa-byte/go2_you_can_move.git
+    ```
+    
+    If you have already cloned the repository without the flag, you can initialize the submodules by running this command from inside the repository's root directory:
+    ```bash
+    git submodule update --init --recursive
     ```
 
 2.  **Navigate to your workspace root:**
@@ -25,7 +18,7 @@ Before building this workspace, please ensure you have the following dependencie
     cd ~/your_ros2_ws
     ```
 
-3.  **Install dependencies (if any):**
+3.  **Install dependencies:**
     ```bash
     rosdep install --from-paths src -y --ignore-src
     ```
