@@ -1,0 +1,6 @@
+[submodule "go2_driver"]
+	path = go2_driver
+	url = https://github.com/unitreerobotics/go2_driver.git
+[submodule "go2_interfaces"]
+	path = go2_interfaces
+	url = https://github.com/unitreerobotics/go2_interfaces.git
