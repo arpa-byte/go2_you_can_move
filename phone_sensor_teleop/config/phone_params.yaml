@@ -1,0 +1,16 @@
+phone_sensor_teleop_node:
+  ros__parameters:
+    
+    # --- Robot Speed Parameters ---
+    tuning:
+      forward_speed: 0.6
+      backward_speed: -0.6
+      turn_speed: 1.0       # Speed for turning during diagonal movement
+      # --- NEW: Added a specific speed for sideways movement ---
+      strafe_speed: 0.6       # m/s
+
+    # --- Phone Tilt Thresholds (in degrees) ---
+    mapping:
+      pitch_deadzone_min: -20.0
+      pitch_deadzone_max: 13.0
+      roll_deadzone_abs: 25.0

@@ -26,4 +26,10 @@ install(TARGETS
   simple_teleop_node
   DESTINATION lib/${PROJECT_NAME})
 
+  # <-- NEW: install launch files -->
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+
 ament_package()

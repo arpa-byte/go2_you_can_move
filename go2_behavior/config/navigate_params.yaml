@@ -1,0 +1,17 @@
+coordinate_navigator_node:
+  ros__parameters:
+
+    # --- Goal Coordinate ---
+    # The target position for the robot in meters.
+    goal_x: 1.0
+    goal_y: 1.0
+
+    # --- Robot Speeds ---
+    linear_speed: 0.4    # m/s
+    angular_speed: 0.6   # rad/s
+
+    # --- Tolerances ---
+    # How close the robot needs to be to the goal to be considered "arrived".
+    distance_tolerance: 0.1   # meters (10 cm)
+    # How close the robot's orientation needs to be to the target angle.
+    angle_tolerance: 0.05     # radians (~3 degrees)
