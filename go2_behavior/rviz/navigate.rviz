@@ -53,6 +53,7 @@ Visualization Manager:
       Hide Inactive Objects: true
     - Class: rviz_default_plugins/MoveCamera
     - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/SetGoal
   Value: true
   Views:
     Current:
