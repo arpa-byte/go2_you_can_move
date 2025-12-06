@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, PoseStamped
 from nav_msgs.msg import Odometry
 from visualization_msgs.msg import Marker
 import math
@@ -44,23 +44,28 @@ class CoordinateNavigatorNode(Node):
         self.odom_subscriber_ = self.create_subscription(
             Odometry, '/odom', self.odom_callback, 10)
         
+        # --- NEW: Subscribe to RViz2 goal pose ---
+        self.goal_pose_subscriber_ = self.create_subscription(
+            PoseStamped, '/goal_pose', self.goal_pose_callback, 10)
+        
         self.timer_ = self.create_timer(0.1, self.control_loop)
 
         self.get_logger().info(f"Target Goal: ({self.goal_x_:.2f}, {self.goal_y_:.2f})")
         self.get_logger().info(">>> PRESS 'ENTER' TO START <<<")
         self.get_logger().info(">>> PRESS 'SPACEBAR' FOR E-STOP <<<")
+        self.get_logger().info(">>> SET GOAL POSE IN RVIZ2 TO UPDATE TARGET <<<")
 
     def _declare_parameters(self):
-        self.declare_parameter('goal_x', 0.0)
-        self.declare_parameter('goal_y', 0.0)
+        self.declare_parameter('target_x', 0.0)
+        self.declare_parameter('target_y', 0.0)
         self.declare_parameter('linear_speed', 0.4)
         self.declare_parameter('angular_speed', 0.5)
         self.declare_parameter('distance_tolerance', 0.1)
         self.declare_parameter('angle_tolerance', 0.05)
 
     def _load_parameters(self):
-        self.goal_x_ = self.get_parameter('goal_x').get_parameter_value().double_value
-        self.goal_y_ = self.get_parameter('goal_y').get_parameter_value().double_value
+        self.goal_x_ = self.get_parameter('target_x').get_parameter_value().double_value
+        self.goal_y_ = self.get_parameter('target_y').get_parameter_value().double_value
         self.linear_speed_ = self.get_parameter('linear_speed').get_parameter_value().double_value
         self.angular_speed_ = self.get_parameter('angular_speed').get_parameter_value().double_value
         self.dist_tolerance_ = self.get_parameter('distance_tolerance').get_parameter_value().double_value
@@ -90,6 +95,20 @@ class CoordinateNavigatorNode(Node):
         self.current_y = msg.pose.pose.position.y
         self.current_yaw = self.euler_from_quaternion(msg.pose.pose.orientation)
         self.odom_received = True
+
+    # --- NEW: Callback to handle goal pose from RViz2 ---
+    def goal_pose_callback(self, msg: PoseStamped):
+        with self.lock:
+            self.goal_x_ = msg.pose.position.x
+            self.goal_y_ = msg.pose.position.y
+            # Extract yaw from the quaternion in the goal pose
+            self.goal_yaw_ = self.euler_from_quaternion(msg.pose.orientation)
+            self.state = 'TURNING_TO_GOAL'
+            self.start_command_received = True
+            self.emergency_stop_active = False
+            self.get_logger().info(
+                f'New goal pose received from RViz2: ({self.goal_x_:.2f}, {self.goal_y_:.2f}, yaw: {math.degrees(self.goal_yaw_):.1f}°)'
+            )
 
     def control_loop(self):
         # Continuously publish the marker so it appears in RViz whenever it opens
