@@ -99,10 +99,10 @@ auto current_time = this->now();
         last_time_ = current_time;
 
         // --- LOG BIAS (optional) ---
-        if (bias_index_ == 0) {
-            RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 5000,
-                                 "Yaw bias: %.6f rad/s", bias_);
-        }
+        // if (bias_index_ == 0) {
+        //     RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 5000,
+        //                          "Yaw bias: %.6f rad/s", bias_);
+        // }
     }
 
     // --- BIAS FILTER ---
